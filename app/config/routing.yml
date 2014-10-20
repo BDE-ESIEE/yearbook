@@ -1,0 +1,4 @@
+ferus_year_book:
+    resource: "@FerusYearBookBundle/Resources/config/routing.yml"
+    prefix:   /
+

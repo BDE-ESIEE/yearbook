@@ -2,12 +2,29 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <title>Year-Book</title>
+        {% block stylesheets %}
+            <link  href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+            <link  href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet">
+            <link  href="{{ asset('css/cropper.css') }}" rel="stylesheet">
+        {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+    <body data-get-student-api="{{ path('api_get_student', {query:'-query-'}) }}">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <img src="{{ asset('img/main.png') }}" style="width: 100%">
+                    <h1>Year-Book ESIEE <small>2014-2015</small></h1>
+                    {% block body %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        {% block javascripts %}
+            <script src="{{ asset('js/jquery-2.1.1.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/cropper.js') }}"></script>
+            <script src="{{ asset('js/search-input.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

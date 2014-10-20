@@ -1,0 +1,4 @@
+services:
+#    ferus_year_book.example:
+#        class: Ferus\YearBookBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
