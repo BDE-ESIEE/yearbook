@@ -70,3 +70,24 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+stof_doctrine_extensions:
+    uploadable:
+        default_file_path: %kernel.root_dir%/../web/uploads
+        mime_type_guesser_class: Stof\DoctrineExtensionsBundle\Uploadable\MimeTypeGuesserAdapter
+        default_file_info_class: Stof\DoctrineExtensionsBundle\Uploadable\UploadedFileInfo
+        validate_writable_directory: false
+    orm:
+        default:
+            uploadable: true
+
+jms_di_extra:
+    automatic_controller_injections:
+        properties:
+            request: @request
+            em: @doctrine.orm.entity_manager
+            um: @fos_user.user_manager
+            paginator: @knp_paginator
+            uploadableManager: @stof_doctrine_extensions.uploadable.manager
+            mailer: @mailer
+            session: @session

@@ -1,9 +1,66 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    <input id="search" class="form-control" placeholder="Nom, Prénom ou code cantine" style="margin-bottom: 15px">
-    <div id="desc">
-        <p>Tapez votre <b>Nom</b> et/ou <b>Prénom</b> pour mettre à jour votre photo et votre citation.
-            Vous pouvez aussi utiliser votre <b>code cantine</b> affiché sur votre carte étudiante en bas à droite (code à 7 chiffres).</p>
-    </div>
+    {% if error is defined %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    {% if success is defined %}
+        <div class="alert alert-success">{{ success }}</div>
+    {% endif %}
+
+    <form enctype="multipart/form-data" method="post">
+        <input id="search" name="id" class="form-control" placeholder="Nom, Prénom ou code cantine" style="margin-bottom: 15px">
+        <i id="spinner" class="fa fa-2x fa-spinner fa-spin" style="float: right;margin: -45px 5px 0 0;display: none"></i>
+        <div id="desc">
+            <p data-p="desc">
+                Tapez votre <b>Nom</b> et/ou <b>Prénom</b> pour mettre à jour votre photo et votre citation.
+                Vous pouvez aussi utiliser votre <b>code cantine</b> affiché sur votre carte étudiante en bas à droite (code à 7 chiffres).
+            </p>
+            <p data-p="error" style="display: none">
+                Essayez de taper votre <b>prénom</b> ET votre <b>nom</b> pour vous identifier de manière unique !<br>
+                Si vos prénom/nom ne suffisent pas, tapez simplement votre <b>code cantine</b>.
+                <img src="{{ asset('img/carte.png') }}" style="width: 100%">
+            </p>
+        </div>
+        <div id="form" style="display: none">
+            <label for="quote">Citation :</label>
+            <textarea id="quote" name="quote" class="form-control" data-limit="240" maxlength="240" style="resize: vertical"></textarea>
+            <span class="help-block" id="limit-counter"></span>
+
+
+            <label for="password">Code d'édition :</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+            <span class="help-block">
+                Si c'est la première fois que vous utilisez ce site alors choisissez un code secret pour pouvoir éditer vos info plus tard.
+                Sinon tapez le code que vous aviez choisi la première fois (ce code vous à été envoyé par mail).
+            </span>
+
+
+            <label class="btn btn-success btn-block" for="file" style="margin: 15px 0">
+                <i class="glyphicon glyphicon-camera"></i> Ajouter une photo !
+            </label>
+            <input id="file" name="file" style="display: none" type="file">
+            <div class="img-container">
+                <img id="img" data-src="{{ asset('') }}">
+            </div>
+
+            <input type="hidden" id="x" name="x">
+            <input type="hidden" id="y" name="y">
+            <input type="hidden" id="w" name="w">
+            <input type="hidden" id="h" name="h">
+
+
+            <button id="send" class="btn btn-primary" style="margin-top: 15px" disabled>
+                <i class="glyphicon glyphicon-ok"></i> Enregistrer
+            </button>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function(){
+        });
+    </script>
 {% endblock %}

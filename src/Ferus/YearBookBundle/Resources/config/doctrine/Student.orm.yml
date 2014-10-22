@@ -1,0 +1,41 @@
+Ferus\YearBookBundle\Entity\Student:
+    type: entity
+    table: null
+    repositoryClass: Ferus\YearBookBundle\Entity\StudentRepository
+    gedmo:
+        uploadable:
+            allowOverwrite: true
+            filenameGenerator: SHA1
+    id:
+        id:
+            type: integer
+            id: true
+    fields:
+        firstName:
+            type: string
+            length: 255
+            column: first_name
+        lastName:
+            type: string
+            length: 255
+            column: last_name
+        class:
+            type: string
+            length: '50'
+        quote:
+            type: string
+            length: 255
+            nullable: true
+        password:
+            type: string
+            length: 255
+        path:
+            type: string
+            length: 255
+            gedmo:
+                - uploadableFilePath
+
+        email:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

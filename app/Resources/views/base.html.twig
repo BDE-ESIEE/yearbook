@@ -7,6 +7,7 @@
             <link  href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
             <link  href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet">
             <link  href="{{ asset('css/cropper.css') }}" rel="stylesheet">
+            <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
         {% endblock %}
     </head>
     <body data-get-student-api="{{ path('api_get_student', {query:'-query-'}) }}">
@@ -14,7 +15,7 @@
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
                     <img src="{{ asset('img/main.png') }}" style="width: 100%">
-                    <h1>Year-Book ESIEE <small>2014-2015</small></h1>
+                    <h1 id="name">Year-Book ESIEE <small>2014-2015</small></h1>
                     {% block body %}
                     {% endblock %}
                 </div>
@@ -25,6 +26,8 @@
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/cropper.js') }}"></script>
             <script src="{{ asset('js/search-input.js') }}"></script>
+            <script src="{{ asset('js/limiter.js') }}"></script>
+            <script src="{{ asset('js/upload.js') }}"></script>
         {% endblock %}
     </body>
 </html>

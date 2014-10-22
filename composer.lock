@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dedd563b47d39c3a51e6b12b6fe29b5c",
+    "hash": "baa68136b0dac6683646bb680e7531bd",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -612,6 +612,48 @@
                 "orm"
             ],
             "time": "2014-10-06 13:22:50"
+        },
+        {
+            "name": "ferus/fairpay-php-sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nick-keller/fairpay-php-sdk.git",
+                "reference": "e7b00f716137d0b9b253e254934e85ed8c4d64b5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nick-keller/fairpay-php-sdk/zipball/e7b00f716137d0b9b253e254934e85ed8c4d64b5",
+                "reference": "e7b00f716137d0b9b253e254934e85ed8c4d64b5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Ferus": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Nicolas Keller",
+                    "email": "nicolas.keller@edu.Esiee.fr",
+                    "homepage": "http://nicolas-keller.com"
+                }
+            ],
+            "description": "PHP DSK to work with FairPay",
+            "keywords": [
+                "bde",
+                "esiee",
+                "fairpay",
+                "sdk"
+            ],
+            "time": "2014-10-20 19:03:38"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -2110,7 +2152,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "stof/doctrine-extensions-bundle": 20,
-        "jms/security-extra-bundle": 20
+        "jms/security-extra-bundle": 20,
+        "ferus/fairpay-php-sdk": 20
     },
     "prefer-stable": false,
     "platform": {
