@@ -619,12 +619,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nick-keller/fairpay-php-sdk.git",
-                "reference": "e7b00f716137d0b9b253e254934e85ed8c4d64b5"
+                "reference": "02a76890f1f6c9db7fd6ab976dad7819f18d39a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nick-keller/fairpay-php-sdk/zipball/e7b00f716137d0b9b253e254934e85ed8c4d64b5",
-                "reference": "e7b00f716137d0b9b253e254934e85ed8c4d64b5",
+                "url": "https://api.github.com/repos/nick-keller/fairpay-php-sdk/zipball/02a76890f1f6c9db7fd6ab976dad7819f18d39a8",
+                "reference": "02a76890f1f6c9db7fd6ab976dad7819f18d39a8",
                 "shasum": ""
             },
             "require": {
@@ -653,7 +653,7 @@
                 "fairpay",
                 "sdk"
             ],
-            "time": "2014-10-20 19:03:38"
+            "time": "2014-10-22 11:04:03"
         },
         {
             "name": "gedmo/doctrine-extensions",

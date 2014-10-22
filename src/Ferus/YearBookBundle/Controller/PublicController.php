@@ -121,6 +121,8 @@ class PublicController extends Controller
     {
         try{
             $fairpay = new FairPay();
+            $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
+            $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
             $student = $fairpay->getStudent($query);
             $inBdd = $this->em->getRepository('FerusYearBookBundle:Student')->findAsArray($student->id);
 
