@@ -140,7 +140,7 @@ class PublicController extends Controller
     }
 
     /**
-     * @Template("FerusYearBookBundle:Public:index")
+     * @Template("FerusYearBookBundle:Public:index.html.twig")
      */
     public function requestPassAction(Student $student)
     {
@@ -154,7 +154,7 @@ class PublicController extends Controller
             ->setTo(array($student->getEmail() => $student->getFirstName() . ' ' . $student->getLastName()))
             ->setBody(
                 $this->renderView(
-                    'FerusYearBookBundle:Email:confirm.html.twig',
+                    'FerusYearBookBundle:Email:request.html.twig',
                     array(
                         'name' => $student->getFirstName(),
                         'code' => $student->getPassword(),
