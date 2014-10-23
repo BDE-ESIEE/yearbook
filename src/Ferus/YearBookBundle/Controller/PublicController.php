@@ -36,6 +36,8 @@ class PublicController extends Controller
             if($student === null){
                 try{
                     $fairpay = new FairPay();
+                    $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
+                    $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
                     $data = $fairpay->getStudent($request->request->get('id'));
                 }
                 catch(ApiErrorException $e){
