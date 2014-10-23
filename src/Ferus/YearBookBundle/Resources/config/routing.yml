@@ -2,6 +2,10 @@ home:
     path:     /
     defaults: { _controller: FerusYearBookBundle:Public:index }
 
+request_pass:
+    path:     /request-pass/{id}
+    defaults: { _controller: FerusYearBookBundle:Public:requestPass }
+
 api_get_student:
     path:   /search/{query}
     defaults: { _controller: FerusYearBookBundle:Public:search }
