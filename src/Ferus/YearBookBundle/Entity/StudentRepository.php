@@ -72,6 +72,7 @@ class StudentRepository extends EntityRepository
 
         if(isset($student['firstName'])) $student['first_name'] = $student['firstName'];
         if(isset($student['lastName'])) $student['last_name'] = $student['lastName'];
+        $student['password'] = sha1(uniqid());
 
         return $student;
     }
