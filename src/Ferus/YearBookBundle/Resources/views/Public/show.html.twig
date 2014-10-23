@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('admin') }}" class="btn btn-primary btn-sm">
+        <i class="glyphicon glyphicon-arrow-left"></i> Retour
+    </a>
+    <div class="text-center" style="margin-bottom: 15px">
+        <img style="width: 60%" src="{{ asset(student.webPath) }}">
+    </div>
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="btn-group btn-group-justified" style="margin-bottom: 15px">
+        <a class="btn btn-danger">
+            <i class="glyphicon glyphicon-remove"></i> Suppr. image
+        </a>
+        <a class="btn btn-primary">
+            Trop zoomé
+        </a>
+        <a class="btn btn-primary">
+            Trop flou
+        </a>
+        <a class="btn btn-primary">
+            Mauvaise qualité
+        </a>
+    </div>
+    {% endif %}
+    <div class="list-group">
+        <div class="list-group-item">
+            {{ student.id }}
+        </div>
+        <div class="list-group-item">
+            {{ student.firstName }} {{ student.lastName }}
+        </div>
+        <div class="list-group-item">
+            {{ student.class }}
+        </div>
+        <div class="list-group-item">
+            Citation : {{ student.quote }}
+        </div>
+        <div class="list-group-item">
+            {{ student.email }}
+        </div>
+        {% if is_granted('ROLE_ADMIN') %}
+        <div class="list-group-item">
+            Code d'édition : {{ student.password }}
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

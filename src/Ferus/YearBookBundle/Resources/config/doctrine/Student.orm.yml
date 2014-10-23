@@ -32,6 +32,7 @@ Ferus\YearBookBundle\Entity\Student:
         path:
             type: string
             length: 255
+            nullable: true
             gedmo:
                 - uploadableFilePath
 

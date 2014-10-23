@@ -10,6 +10,14 @@ admin:
     path:     /admin
     defaults: { _controller: FerusYearBookBundle:Public:admin }
 
+show:
+    path:     /admin/{id}
+    defaults: { _controller: FerusYearBookBundle:Public:show }
+
+thumb:
+    path:     /thumb/{id}
+    defaults: { _controller: FerusYearBookBundle:Public:thumb }
+
 api_get_student:
     path:   /search/{query}
     defaults: { _controller: FerusYearBookBundle:Public:search }

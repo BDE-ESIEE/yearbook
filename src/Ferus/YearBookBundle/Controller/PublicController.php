@@ -74,23 +74,25 @@ class PublicController extends Controller
             $this->em->persist($student);
             $this->em->flush();
 
-            if(strpos($student->getPath(), '.png'))
-                $img = imagecreatefrompng($student->getPath());
-            else
-                $img = imagecreatefromjpeg($student->getPath());
+            if($student->getFile()){
+                if(strpos($student->getPath(), '.png'))
+                    $img = imagecreatefrompng($student->getPath());
+                else
+                    $img = imagecreatefromjpeg($student->getPath());
 
-            $result = imagecreatetruecolor(472, 551);
-            imagecopyresampled($result, $img,
-                0, 0,
-                $request->request->get('x'), $request->request->get('y'),
-                472, 551,
-                $request->request->get('w'), $request->request->get('h')
-            );
+                $result = imagecreatetruecolor(472, 551);
+                imagecopyresampled($result, $img,
+                    0, 0,
+                    $request->request->get('x'), $request->request->get('y'),
+                    472, 551,
+                    $request->request->get('w'), $request->request->get('h')
+                );
 
-            if(strpos($student->getPath(), '.png'))
-                imagepng($result, $student->getPath(), 0);
-            else
-                imagejpeg($result, $student->getPath(), 100);
+                if(strpos($student->getPath(), '.png'))
+                    imagepng($result, $student->getPath(), 0);
+                else
+                    imagejpeg($result, $student->getPath(), 100);
+            }
 
             $message = \Swift_Message::newInstance()
                 ->setSubject('[Year Book] Mise à jour de tes infos')
@@ -179,6 +181,42 @@ class PublicController extends Controller
     {
         return array(
             'students' => $this->em->getRepository('FerusYearBookBundle:Student')->findAll(),
+        );
+    }
+
+    public function thumbAction(Student $student)
+    {
+        if(strpos($student->getPath(), '.png'))
+            $img = imagecreatefrompng($student->getPath());
+        else
+            $img = imagecreatefromjpeg($student->getPath());
+
+        $result = imagecreatetruecolor(47, 55);
+        imagecopyresampled($result, $img,
+            0, 0,
+            0, 0,
+            47, 55,
+            472, 551
+        );
+
+        ob_start();
+        imagejpeg($result, null, 80);
+        $image = ob_get_clean();
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'image/jpeg');
+        $response->setContent($image);
+
+        return $response;
+    }
+
+    /**
+     * @Template
+     */
+    public function showAction(Student $student)
+    {
+        return array(
+            'student' => $student,
         );
     }
 }

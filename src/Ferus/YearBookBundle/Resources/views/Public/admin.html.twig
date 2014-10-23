@@ -2,6 +2,6 @@
 
 {% block body %}
     {% for student in students %}
-        <div class="pic" style="background-image: url({{ asset(student.webPath) }})" data-id="{{ student.id }}"></div>
+        <a href="{{ path('show', {id:student.id}) }}" class="pic" style="background-image: url({{ path('thumb', {id:student.id}) }})" data-id="{{ student.id }}"></a>
     {% endfor %}
 {% endblock %}

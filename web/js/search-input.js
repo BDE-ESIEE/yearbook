@@ -46,13 +46,11 @@ jQuery.fn.extend({
                                 $('#quote').html(data.quote);
                                 $('#img').cropper("setImgSrc", $('#img').data('src') + data.path.substr(data.path.indexOf("../web/")+ 7));
 
-                                $('#send').removeAttr('disabled');
                                 $('label[for=file]').html('Choisir une autre photo');
                                 $('#request').attr('href', $('#request').data('href').replace('-id-', data.id));
                             }
                             else{
                                 $('#quote').html('');
-                                $('#send').attr('disabled', '');
                                 $('#request').removeAttr('href');
                             }
                         },
