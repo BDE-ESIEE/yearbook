@@ -48,10 +48,12 @@ jQuery.fn.extend({
 
                                 $('#send').removeAttr('disabled');
                                 $('label[for=file]').html('Choisir une autre photo');
+                                $('#request').attr('href', $('#request').data('href').replace('-id-', data.id));
                             }
                             else{
                                 $('#quote').html('');
                                 $('#send').attr('disabled', '');
+                                $('#request').removeAttr('href');
                             }
                         },
                         dataType: 'json'
