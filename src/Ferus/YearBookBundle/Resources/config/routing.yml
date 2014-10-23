@@ -6,6 +6,10 @@ request_pass:
     path:     /request-pass/{id}
     defaults: { _controller: FerusYearBookBundle:Public:requestPass }
 
+admin:
+    path:     /admin
+    defaults: { _controller: FerusYearBookBundle:Public:admin }
+
 api_get_student:
     path:   /search/{query}
     defaults: { _controller: FerusYearBookBundle:Public:search }

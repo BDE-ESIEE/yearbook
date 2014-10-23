@@ -1,0 +1,7 @@
+.pic{
+    display: inline-block;
+    margin: 5px;
+    width: 47px;
+    height: 55px;
+    background-size: cover;
+}

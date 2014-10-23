@@ -1,0 +1,7 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    {% for student in students %}
+        <div class="pic" style="background-image: url({{ asset(student.webPath) }})" data-id="{{ student.id }}"></div>
+    {% endfor %}
+{% endblock %}

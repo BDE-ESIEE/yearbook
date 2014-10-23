@@ -1,7 +1,9 @@
 security:
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    admin: { password: ghtdK7, roles: 'ROLE_ADMIN' }
 
     firewalls:
         dev:
@@ -10,3 +12,11 @@ security:
 
         default:
             anonymous: ~
+            form_login: ~
+            logout: ~
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }

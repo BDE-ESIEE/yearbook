@@ -2,3 +2,11 @@ ferus_year_book:
     resource: "@FerusYearBookBundle/Resources/config/routing.yml"
     prefix:   /
 
+login:
+    path:     /login
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: '::login.html.twig'
+
+login_check:
+    path: /login_check

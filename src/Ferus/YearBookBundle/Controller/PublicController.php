@@ -171,4 +171,14 @@ class PublicController extends Controller
             'success' => 'Nouveau code d\'édition créé. Check tes mails !'
         );
     }
+
+    /**
+     * @Template
+     */
+    public function adminAction()
+    {
+        return array(
+            'students' => $this->em->getRepository('FerusYearBookBundle:Student')->findAll(),
+        );
+    }
 }
