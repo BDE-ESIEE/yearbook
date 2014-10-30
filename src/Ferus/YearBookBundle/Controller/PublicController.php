@@ -180,7 +180,7 @@ class PublicController extends Controller
     public function adminAction()
     {
         return array(
-            'students' => $this->em->getRepository('FerusYearBookBundle:Student')->findAll(),
+            'students' => $this->em->getRepository('FerusYearBookBundle:Student')->findBy(array(), array('class'=>'ASC')),
         );
     }
 
@@ -217,6 +217,22 @@ class PublicController extends Controller
     {
         return array(
             'student' => $student,
+        );
+    }
+
+    /**
+     * @Template
+     */
+    public function sendReminderAction($page)
+    {
+        $fairpay = new FairPay();
+//        $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
+//        $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
+
+        $result = $fairpay->getStudents($page);
+
+        return array(
+            'result' => $result,
         );
     }
 }

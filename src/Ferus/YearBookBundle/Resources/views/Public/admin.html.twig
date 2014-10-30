@@ -2,7 +2,12 @@
 
 {% block body %}
     <p>Total : {{ students|length }}</p>
+    {% set class = '' %}
     {% for student in students %}
+        {% if class != student.class %}
+            {% set class = student.class %}
+            <h2>{{ class }}</h2>
+        {% endif %}
         <a href="{{ path('show', {id:student.id}) }}" class="pic" style="background-image: url({{ path('thumb', {id:student.id}) }})" data-id="{{ student.id }}"></a>
     {% endfor %}
 {% endblock %}
