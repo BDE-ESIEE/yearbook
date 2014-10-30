@@ -1,6 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
+    <p>Total : {{ students|length }}</p>
     {% for student in students %}
         <a href="{{ path('show', {id:student.id}) }}" class="pic" style="background-image: url({{ path('thumb', {id:student.id}) }})" data-id="{{ student.id }}"></a>
     {% endfor %}
