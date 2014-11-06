@@ -1,0 +1,19 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <h4>Page : {{ result.current_page }}</h4>
+    <div class="progress">
+        <div class="progress-bar" style="width: {{ result.current_page * result.items_per_page / result.total_count * 100 }}%;">
+            {{ (result.current_page * result.items_per_page / result.total_count * 100)|round }}%
+        </div>
+    </div>
+    {% if result.next_page %}
+        <a href="{{ path('reminder', {page:result.current_page +1}) }}" class="btn btn-primary">Suivant</a>
+    {% endif %}
+    <h4>{{ sent|length }} messages envoyés</h4>
+    <ul class="list-group">
+        {% for student in result.students %}
+            <li class="list-group-item">{{ student.first_name }} {{ student.last_name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -55,7 +55,7 @@ class PublicController extends Controller
                 $student->setPassword(str_shuffle('aGht73vF'));
             }
             else{
-                if($student->getPassword() !== $request->request->get('password') && $request->request->get('password') !== 'nicoTbo')
+                if($student->getPassword() !== $request->request->get('password') && sha1($request->request->get('password')) !== '709327fb2f5f1a299188e18893c9f2745874a4a3')
                     return array(
                         'error' => 'Code d\'édition incorrect.'
                     );
@@ -226,13 +226,36 @@ class PublicController extends Controller
     public function sendReminderAction($page)
     {
         $fairpay = new FairPay();
-//        $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
-//        $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
+        $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
+        $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
 
         $result = $fairpay->getStudents($page);
+        $sent = array();
+        $repo =$this->em->getRepository('FerusYearBookBundle:Student');
+
+        foreach($result->students as $student){
+            if(! $repo->studentExist($student->id)){
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('[Year Book] Il manque ta photo '.$student->first_name.' !')
+                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                    ->setTo(array($student->email => $student->first_name . ' ' . $student->last_name))
+                    ->setBody(
+                        $this->renderView(
+                            'FerusYearBookBundle:Email:reminder.html.twig',
+                            array(
+                                'name' => $student->first_name,
+                            )
+                        )
+                    )
+                ;
+                $this->get('mailer')->send($message);
+                $sent[] = $student;
+            }
+        }
 
         return array(
             'result' => $result,
+            'sent' => $sent
         );
     }
 }
