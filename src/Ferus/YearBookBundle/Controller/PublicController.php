@@ -230,11 +230,13 @@ class PublicController extends Controller
         $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
 
         $result = $fairpay->getStudents($page);
-        $sent = array();
-        $repo =$this->em->getRepository('FerusYearBookBundle:Student');
+        $sent   = array();
+        $repo   =$this->em->getRepository('FerusYearBookBundle:Student');
+        $mailer = this->get('swiftmailer.mailer.aws');
+        $this->mailer->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(600, \Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
 
         foreach($result->students as $student){
-            if(! $repo->studentExist($student->id)){
+            if(!$repo->studentExist($student->id)){
                 $message = \Swift_Message::newInstance()
                     ->setSubject('[Year Book] Il manque ta photo '.$student->first_name.' !')
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
@@ -243,19 +245,19 @@ class PublicController extends Controller
                         $this->renderView(
                             'FerusYearBookBundle:Email:reminder.html.twig',
                             array(
-                                'name' => $student->first_name,
+                                'student' => $student,
                             )
                         )
                     )
                 ;
-                $this->get('mailer')->send($message);
+                $this->get('swiftmailer.mailer.aws')->send($message);
                 $sent[] = $student;
             }
         }
 
         return array(
             'result' => $result,
-            'sent' => $sent
+            'sent'   => $sent
         );
     }
 }

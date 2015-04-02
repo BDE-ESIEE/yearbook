@@ -8,7 +8,7 @@
         </div>
     </div>
     {% if result.next_page %}
-        <a href="{{ path('reminder', {page:result.current_page +1}) }}" class="btn btn-primary">Suivant</a>
+        <a href="{{ path('reminder', {page:result.current_page +1}) }}" class="next-page btn btn-primary">Suivant</a>
     {% endif %}
     <h4>{{ sent|length }} messages envoyés</h4>
     <ul class="list-group">
@@ -16,4 +16,15 @@
             <li class="list-group-item">{{ student.first_name }} {{ student.last_name }}</li>
         {% endfor %}
     </ul>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if result.next_page %}
+        <script type="text/javascript">
+        $(function() {
+            window.location.assign("{{ url('reminder', {page:result.current_page +1}) }}");
+        });
+        </script>
+    {% endif %}
 {% endblock %}
