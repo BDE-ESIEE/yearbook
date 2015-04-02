@@ -16,5 +16,6 @@ $(function(){
         }
     });
 
-    $('[data-limit]').limiter(240, $('#limit-counter'));
+    if ($('[data-limit]').length > 0)
+        $('[data-limit]').limiter(240, $('#limit-counter'));
 });
