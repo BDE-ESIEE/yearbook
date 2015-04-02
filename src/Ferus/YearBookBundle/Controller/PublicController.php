@@ -233,7 +233,7 @@ class PublicController extends Controller
         $sent   = array();
         $repo   = $this->em->getRepository('FerusYearBookBundle:Student');
         $mailer = $this->get('swiftmailer.mailer.aws');
-        $this->mailer->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(600, \Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
+        $mailer->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(600, \Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
 
         foreach($result->students as $student){
             if(!$repo->studentExist($student->id)){
