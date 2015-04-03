@@ -241,16 +241,19 @@ class PublicController extends Controller
                     ->setSubject('[Year Book] Il manque ta photo '.$student->first_name.' !')
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setTo(array($student->email => $student->first_name . ' ' . $student->last_name))
+                    ->setContentType("text/html")
                     ->setBody(
-                        $this->renderView(
-                            'FerusYearBookBundle:Email:reminder.html.twig',
-                            array(
-                                'student' => $student,
+                        nl2br(
+                            $this->renderView(
+                                'FerusYearBookBundle:Email:reminder.html.twig',
+                                array(
+                                    'student' => $student,
+                                )
                             )
                         )
                     )
                 ;
-                $this->get('swiftmailer.mailer.aws')->send($message);
+                $mailer->send($message);
                 $sent[] = $student;
             }
         }
