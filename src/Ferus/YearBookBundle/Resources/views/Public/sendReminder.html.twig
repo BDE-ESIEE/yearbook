@@ -12,7 +12,7 @@
     {% endif %}
     <h4>{{ sent|length }} messages envoyés</h4>
     <ul class="list-group">
-        {% for student in result.students %}
+        {% for student in sent %}
             <li class="list-group-item">{{ student.first_name }} {{ student.last_name }}</li>
         {% endfor %}
     </ul>
