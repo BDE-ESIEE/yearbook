@@ -238,7 +238,7 @@ class PublicController extends Controller
         foreach($result->students as $student){
             if(!$repo->studentExist($student->id)){
                 $message = \Swift_Message::newInstance()
-                    ->setSubject('[Year Book] Il manque ta photo '.$student->first_name.' !')
+                    ->setSubject('[Year Book] '.$student->first_name.', dernier jour pour uploader ta photo !')
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setTo(array($student->email => $student->first_name . ' ' . $student->last_name))
                     ->setContentType("text/html")
