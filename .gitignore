@@ -3,6 +3,8 @@
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
+/web/export/*
+!web/export/.gitkeep
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /build/
