@@ -263,4 +263,98 @@ class PublicController extends Controller
             'sent'   => $sent
         );
     }
+
+    public function exportPhotoAction()
+    {
+        $fairpay = new FairPay();
+        $repo    = $this->em->getRepository('FerusYearBookBundle:Student');
+        $page    = 0;
+        $promos  = array();
+
+        do {
+            $result = $fairpay->getStudents($page);
+            foreach($result->students as $student) {
+                $std = $repo->find($student->id);
+                if (!array_key_exists($student->class, $promos))
+                    $promos[$student->class] = array();
+
+                if(null === $std) {
+                    $student->path = $student->id.'.jpg';
+                    if (!file_exists('export/'.$student->id.'.jpg')) {
+                        $fp = @fopen("https://bde.esiee.fr/fairpay/api/students/photo/by-id/".$student->id.".jpg", 'r');
+                        if (!$fp) {
+                            continue;
+                        }
+
+                        file_put_contents('export/'.$student->id.'.jpg', $fp);
+                        fclose($fp);
+                    }
+                    $student->quote = null;
+                } else {
+                    $ext            = pathinfo($std->getPath(), PATHINFO_EXTENSION);
+                    $student->path  = $student->id.'.'.$ext;
+                    $student->quote = strtr($std->getQuote(), array(
+                        "\r" => "", 
+                        "\n" => "\\n",
+                        '"'  => '\"',
+                    ));
+                    if (!file_exists('export/'.$student->id.'.'.$ext))
+                        copy($std->getPath(), 'export/'.$student->id.'.'.$ext);
+                }
+
+                $promos[$student->class][] = array(
+                    'last_name'  => $student->last_name,
+                    'first_name' => $student->first_name,
+                    'quote'      => $student->quote,
+                    'path'       => $student->path,
+                );
+            }
+            $page++;
+            //break;
+            var_dump($page);
+        } while ($result->next_page);
+
+        foreach ($promos as $promo => $students) {
+            var_dump($promo);
+            if (count($students) > 0) {
+                $fp = fopen('export/'.$promo.'.csv', 'w');
+
+                fputcsv($fp, array_keys($students[0]));
+
+                foreach ($students as $student) {
+                    fputcsv($fp, $student);
+                }
+                fclose($fp);
+            }
+        }
+
+        $zip = new \ZipArchive();
+        $ret = $zip->open('export.zip', \ZipArchive::CREATE);
+        if ($ret !== TRUE) {
+            printf("Echec lors de l'ouverture de l'archive %d", $ret);
+        } else {
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(realpath('export')),
+                \RecursiveIteratorIterator::LEAVES_ONLY
+            );
+
+            foreach ($files as $name => $file) {
+                if ($file->getFilename() !== "." && $file->getFilename() !== ".."){
+                    $zip->addFile($file->getRealPath(), $file->getFilename());
+                }
+            }
+
+            $zip->close();
+        }
+
+        return new Response('<!DOCTYPE html>
+            <html>
+            <head>
+                <title></title>
+            </head>
+            <body>
+            
+            </body>
+            </html>');
+    }
 }
