@@ -10,6 +10,10 @@ admin:
     path:     /admin
     defaults: { _controller: FerusYearBookBundle:Public:admin }
 
+export_photos:
+    path:     /admin/export
+    defaults: { _controller: FerusYearBookBundle:Public:exportPhoto }
+
 show:
     path:     /admin/{id}
     defaults: { _controller: FerusYearBookBundle:Public:show }
@@ -25,7 +29,3 @@ reminder:
 api_get_student:
     path:   /search/{query}
     defaults: { _controller: FerusYearBookBundle:Public:search }
-
-export_photos:
-    path:     /admin/export
-    defaults: { _controller: FerusYearBookBundle:Public:exportPhoto }
