@@ -266,19 +266,27 @@ class PublicController extends Controller
 
     public function exportPhotoAction()
     {
-        $fairpay = new FairPay();
-        $repo    = $this->em->getRepository('FerusYearBookBundle:Student');
-        $page    = 0;
-        $promos  = array();
+        $fairpay     = new FairPay();
+        $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
+        $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
+        $repo        = $this->em->getRepository('FerusYearBookBundle:Student');
+        $page        = 0;
+        $promos      = array();
+        $last_names  = array();
+        $first_names = array();
 
         do {
             $result = $fairpay->getStudents($page);
             foreach($result->students as $student) {
                 $std = $repo->find($student->id);
-                if (!array_key_exists($student->class, $promos))
-                    $promos[$student->class] = array();
+                if (!array_key_exists($student->class, $promos)) {
+                    $promos[$student->class]      = array();
+                    $last_names[$student->class]  = array();
+                    $first_names[$student->class] = array();
+                }
 
                 if(null === $std) {
+                    // On télécharge les photos de ceux qui en ont pas
                     $student->path = $student->id.'.jpg';
                     if (!file_exists('export/'.$student->id.'.jpg')) {
                         $fp = @fopen("https://bde.esiee.fr/fairpay/api/students/photo/by-id/".$student->id.".jpg", 'r');
@@ -291,12 +299,12 @@ class PublicController extends Controller
                     }
                     $student->quote = null;
                 } else {
+                    // Ou on copie les photos de ceux qui en ont
                     $ext            = pathinfo($std->getPath(), PATHINFO_EXTENSION);
                     $student->path  = $student->id.'.'.$ext;
                     $student->quote = strtr($std->getQuote(), array(
                         "\r" => "", 
-                        "\n" => "\\n",
-                        '"'  => '\"',
+                        "\n" => " ",
                     ));
                     if (!file_exists('export/'.$student->id.'.'.$ext))
                         copy($std->getPath(), 'export/'.$student->id.'.'.$ext);
@@ -306,14 +314,25 @@ class PublicController extends Controller
                     'last_name'  => $student->last_name,
                     'first_name' => $student->first_name,
                     'quote'      => $student->quote,
-                    'path'       => $student->path,
+                    '@path'      => $student->path,
                 );
+
+                $last_names[$student->class][]  = $student->last_name;
+                $first_names[$student->class][] = $student->first_name;
             }
             $page++;
             //break;
             var_dump($page);
         } while ($result->next_page);
 
+        // On trie par ordre alphabétique
+        foreach ($last_names as $promo => $students) {
+            if (count($students) > 0) {
+                array_multisort($last_names[$promo], SORT_ASC, $first_names[$promo], SORT_ASC, $promos[$promo]);
+            }
+        }
+
+        // On exporte en .csv
         foreach ($promos as $promo => $students) {
             var_dump($promo);
             if (count($students) > 0) {
@@ -328,6 +347,7 @@ class PublicController extends Controller
             }
         }
 
+        // On créer une archive
         $zip = new \ZipArchive();
         $ret = $zip->open('export.zip', \ZipArchive::CREATE);
         if ($ret !== TRUE) {
