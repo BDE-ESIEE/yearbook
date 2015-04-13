@@ -279,37 +279,37 @@ class PublicController extends Controller
             $result = $fairpay->getStudents($page);
             foreach($result->students as $student) {
                 $std = $repo->find($student->id);
-                if (!array_key_exists($student->class, $promos)) {
-                    $promos[$student->class]      = array();
-                    $last_names[$student->class]  = array();
-                    $first_names[$student->class] = array();
-                }
 
                 if(null === $std) {
                     // On télécharge les photos de ceux qui en ont pas
-                    $student->path = $student->id.'.jpg';
-                    if (!file_exists('export/'.$student->id.'.jpg')) {
+                    $student->path = $student->class.'-'.$student->id.'.jpg';
+                    if (!file_exists('export/'.$student->class.'-'.$student->id.'.jpg')) {
                         $fp = @fopen("https://bde.esiee.fr/fairpay/api/students/photo/by-id/".$student->id.".jpg", 'r');
                         if (!$fp) {
                             continue;
                         }
 
-                        file_put_contents('export/'.$student->id.'.jpg', $fp);
+                        file_put_contents('export/'.$student->class.'-'.$student->id.'.jpg', $fp);
                         fclose($fp);
                     }
                     $student->quote = null;
                 } else {
                     // Ou on copie les photos de ceux qui en ont
                     $ext            = pathinfo($std->getPath(), PATHINFO_EXTENSION);
-                    $student->path  = $student->id.'.'.$ext;
+                    $student->path  = $student->class.'-'.$student->id.'.'.$ext;
                     $student->quote = strtr($std->getQuote(), array(
                         "\r" => "", 
                         "\n" => " ",
                     ));
-                    if (!file_exists('export/'.$student->id.'.'.$ext))
-                        copy($std->getPath(), 'export/'.$student->id.'.'.$ext);
+                    if (!file_exists('export/'.$student->class.'-'.$student->id.'.'.$ext))
+                        copy($std->getPath(), 'export/'.$student->class.'-'.$student->id.'.'.$ext);
                 }
 
+                if (!array_key_exists($student->class, $promos)) {
+                    $promos[$student->class]      = array();
+                    $last_names[$student->class]  = array();
+                    $first_names[$student->class] = array();
+                }
                 $promos[$student->class][] = array(
                     'last_name'  => $student->last_name,
                     'first_name' => $student->first_name,
@@ -325,27 +325,88 @@ class PublicController extends Controller
             var_dump($page);
         } while ($result->next_page);
 
-        // On trie par ordre alphabétique
+        // On trie chaque promo par ordre alphabétique
         foreach ($last_names as $promo => $students) {
             if (count($students) > 0) {
                 array_multisort($last_names[$promo], SORT_ASC, $first_names[$promo], SORT_ASC, $promos[$promo]);
             }
         }
 
+        // On trie les promos
+        ksort($promos);
+        uasort($promos, function($a, $b) {
+            preg_match('/([A-Z1-6_]+)-\w+/', $a[0]['@path'], $promo_a);
+            preg_match('/([A-Z1-6_]+)-\w+/', $b[0]['@path'], $promo_b);
+            $promo_a = $promo_a[1];
+            $promo_b = $promo_b[1];
+            $match_return_a = preg_match('/E([1-6])\w*/', $promo_a, $match_a);
+            $match_return_b = preg_match('/E([1-6])\w*/', $promo_b, $match_b);
+            
+            if ($match_return_a && $match_return_b)
+            {
+                if ($match_a[1] === $match_b[1])
+                {
+                    return (count($a) < count($b) ? 1 : -1);
+                } else {
+                    return ((int) $match_a[1] < (int) $match_b[1] ? -1 : 1);
+                }
+            } elseif ($match_return_a && !$match_return_b) {
+                return -1;
+            } elseif (!$match_return_a && $match_return_b) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
+
         // On exporte en .csv
         foreach ($promos as $promo => $students) {
             var_dump($promo);
             if (count($students) > 0) {
-                $fp = fopen('export/'.$promo.'.csv', 'w');
+                $newFile = true;
+                if (preg_match('/E([1-6])\w*/', $promo, $match))
+                {
+                    var_dump($match);
+                    if (!(isset($last_promo) && $last_promo === $match[1]))
+                    {
+                        $last_promo = $match[1];
+                        $newFile = true;
+                        $filename = 'E'.$last_promo;
+                    } else {
+                        $newFile = false;
+                    }
+                } else {
+                    $filename = $promo;
+                }
 
-                fputcsv($fp, array_keys($students[0]));
+                if ($newFile)
+                {
+                    if (isset($fp) && $fp) {
+                        //mb_convert_encoding($fp, "Windows‑1252", "UTF-8");
+                        fclose($fp);
+                    }
+                    $fp = fopen('export/'.$filename.'.csv', 'w');
+                    fputcsv($fp, array_keys($students[0]));
+                    for ($i=0; $i < 18; $i++) { 
+                        fputcsv($fp, array($filename,$filename,$filename,$filename));
+                    }
+                    $x = 18;
+                } else {
+                    for ($i=0; $i < $empties; $i++) { 
+                        fputcsv($fp, array($promo, $promo, $promo, $promo));
+                    }
+                    $x = 0;
+                }
 
                 foreach ($students as $student) {
                     fputcsv($fp, $student);
+                    $x++;
                 }
-                fclose($fp);
+
+                $empties = 12 - $x%6 + ($x%6 == 0 ? -6 : 0) + ($x%30 > 17 && $x%30 < 24 ? 6 : 0);
             }
         }
+        fclose($fp);
 
         // On créer une archive
         $zip = new \ZipArchive();
