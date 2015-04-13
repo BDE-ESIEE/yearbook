@@ -270,7 +270,7 @@ class PublicController extends Controller
         $fairpay->setCurlParam(CURLOPT_HTTPPROXYTUNNEL, true);
         $fairpay->setCurlParam(CURLOPT_PROXY, "proxy.esiee.fr:3128");
         $repo        = $this->em->getRepository('FerusYearBookBundle:Student');
-        $page        = 0;
+        $page        = 1;
         $promos      = array();
         $last_names  = array();
         $first_names = array();
