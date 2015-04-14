@@ -395,7 +395,6 @@ class PublicController extends Controller
                     for ($i=0; $i < $empties; $i++) { 
                         fputcsv($fp, array($promo, $promo, $promo, $promo));
                     }
-                    $x = 0;
                 }
 
                 foreach ($students as $student) {
