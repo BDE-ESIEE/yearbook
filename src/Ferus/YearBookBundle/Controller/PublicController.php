@@ -394,6 +394,7 @@ class PublicController extends Controller
                 } else {
                     for ($i=0; $i < $empties; $i++) { 
                         fputcsv($fp, array($promo, $promo, $promo, $promo));
+                        $x++;
                     }
                 }
 
