@@ -390,7 +390,7 @@ class PublicController extends Controller
                     for ($i=0; $i < 18; $i++) { 
                         fputcsv($fp, array($filename,$filename,$filename,$filename));
                     }
-                    $x = 17;
+                    $x = 18;
                 } else {
                     for ($i=0; $i < $empties; $i++) { 
                         fputcsv($fp, array($promo, $promo, $promo, $promo));
@@ -402,8 +402,8 @@ class PublicController extends Controller
                     fputcsv($fp, $student);
                     $x++;
                 }
-
-                $empties = 12 - $x%6 + ($x%6 == 0 ? -6 : 0) + ($x%30 > 17 && $x%30 < 24 ? 6 : 0);
+                
+                $empties = 12 - $x%6 + ($x%6 == 0 ? -6 : 0) + ($x%30 >= 19 && $x%30 <= 24 ? 6 : 0);
             }
         }
         fclose($fp);
