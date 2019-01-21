@@ -19,6 +19,8 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
+    yearbook_deadline: 01/06
+
     debug_toolbar:          true
     debug_redirects:        false
     use_assetic_controller: true

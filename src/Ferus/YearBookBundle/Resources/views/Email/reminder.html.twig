@@ -1,10 +1,10 @@
 Bonjour {{ student.first_name }} !
 Nous constatons que tu fais partie des quelques personnes qui n'ont toujours pas mis en ligne leur photo pour le Yearbook.
-Dépêches toi car tu as encore jusqu'à <b>demain jeudi 9 avril 23h59</b> pour poster ta photo !
-Tu peux même choisir une citation. Si tu ne peux pas mettre ta photo dans les temps nous devrons utiliser la photo de ta superbe carte étudiante ^^ :
+Dépêche-toi de poster ta photo avant le {{ deadline }} !
+Tu peux même choisir une citation. Si tu ne peux pas mettre ta photo dans le temps imparti, nous devrons utiliser la photo de ta superbe carte étudiante ^^ :
 <img style="width:111;height:148;background-color: gray;" src="https://bde.esiee.fr/fairpay/api/students/photo/by-id/{{ student.id }}.jpg" />
 Si tu avais déjà mis ta photo, il se peut qu'elle ait été retirée, car :
-- Il avait plusieurs personnes sur la photo
+- Il y avait plusieurs personnes sur la photo
 - On ne voyait pas ton visage
 - Ta photo n'était pas à l'endroit
 
@@ -13,4 +13,4 @@ Tu peux dès maintenant uploader ta photo sur le site :
 {{ url('home') }}
 
 Bien à toi,
-Ton BDE Ferus =)
+Le Club Design

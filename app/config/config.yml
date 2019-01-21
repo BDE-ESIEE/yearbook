@@ -77,7 +77,7 @@ swiftmailer:
             transport: "smtp"
             port: 587
             encryption: tls
-            disable_delivery: true
+            disable_delivery: false
             host:      "%mailer_aws_host%"
             username:  "%mailer_aws_user%"
             password:  "%mailer_aws_password%"

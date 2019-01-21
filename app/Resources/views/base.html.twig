@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>Year-Book</title>
+        <title>Yearbook</title>
         {% block stylesheets %}
             <link  href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
             <link  href="{{ asset('css/bootstrap-theme.min.css') }}" rel="stylesheet">
@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
                     <img src="{{ asset('img/main.png') }}" style="width: 100%">
-                    <h1 id="name">Year-Book ESIEE <small>2014-2015</small></h1>
+                    <h1 id="name">Yearbook ESIEE <small>{{ "now"|date_modify("-1 year")|date("Y") }}-{{ "now"|date("Y") }}</small></h1>
                     {% block body %}
                     {% endblock %}
                 </div>

@@ -95,8 +95,8 @@ class PublicController extends Controller
             }
 
             $message = \Swift_Message::newInstance()
-                ->setSubject('[Year Book] Mise à jour de tes infos')
-                ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setSubject('[Yearbook] Mise à jour de tes infos')
+                ->setFrom(array('club.design@edu.esiee.fr' => 'Club Design'))
                 ->setTo(array($student->getEmail() => $student->getFirstName() . ' ' . $student->getLastName()))
                 ->setBody(
                     $this->renderView(
@@ -150,9 +150,12 @@ class PublicController extends Controller
         $this->em->persist($student);
         $this->em->flush();
 
+        $mailer = $this->get('swiftmailer.mailer.aws');
+        $mailer->registerPlugin(new \Swift_Plugins_ThrottlerPlugin(600, \Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE));
+
         $message = \Swift_Message::newInstance()
-            ->setSubject('[Year Book] Nouveau code d\'édition')
-            ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+            ->setSubject('[Yearbook] Nouveau code d\'édition')
+            ->setFrom(array('club.design@edu.esiee.fr' => 'Club Design'))
             ->setTo(array($student->getEmail() => $student->getFirstName() . ' ' . $student->getLastName()))
             ->setBody(
                 $this->renderView(
@@ -167,7 +170,7 @@ class PublicController extends Controller
                 )
             )
         ;
-        $this->get('mailer')->send($message);
+        $mailer->send($message);
 
         return array(
             'success' => 'Nouveau code d\'édition créé. Check tes mails !'
@@ -238,8 +241,8 @@ class PublicController extends Controller
         foreach($result->students as $student){
             if(!$repo->studentExist($student->id)){
                 $message = \Swift_Message::newInstance()
-                    ->setSubject('[Year Book] '.$student->first_name.', dernier jour pour uploader ta photo !')
-                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                    ->setSubject('[Yearbook] '.$student->first_name.', dernier jour pour uploader ta photo !')
+                    ->setFrom(array('club.design@edu.esiee.fr' => 'Club Design'))
                     ->setTo(array($student->email => $student->first_name . ' ' . $student->last_name))
                     ->setContentType("text/html")
                     ->setBody(
@@ -248,6 +251,7 @@ class PublicController extends Controller
                                 'FerusYearBookBundle:Email:reminder.html.twig',
                                 array(
                                     'student' => $student,
+                                    'deadline' => $this->container->getParameter('deadline_yearbook')
                                 )
                             )
                         )
